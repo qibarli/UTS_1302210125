@@ -15,13 +15,14 @@ public class TaxFunction {
 	 */
 	
 	
-	public static int calculateTax(int monthlySalary, int otherMonthlyIncome, int numberOfMonthWorking, int deductible, boolean isMarried, int numberOfChildren) {
-		
+	 public static int calculateTax(int monthlySalary, int otherMonthlyIncome, int numberOfMonthWorking, int deductible, boolean isMarried, int numberOfChildren) {
 		int tax = 0;
-		
+	
 		if (numberOfMonthWorking > 12) {
-			System.err.println("More than 12 month working per year");
+			System.err.println("Error: More than 12 months working per year");
+			return tax; // Return 0 tax when there's an error
 		}
+	
 		
 		if (numberOfChildren > 3) {
 			numberOfChildren = 3;
