@@ -15,13 +15,14 @@ public class TaxFunction {
 	 */
 	
 	
-	public static int calculateTax(int monthlySalary, int otherMonthlyIncome, int numberOfMonthWorking, int deductible, boolean isMarried, int numberOfChildren) {
-		
+	 public static int calculateTax(int monthlySalary, int otherMonthlyIncome, int numberOfMonthWorking, int deductible, boolean isMarried, int numberOfChildren) {
 		int tax = 0;
-		
+	
 		if (numberOfMonthWorking > 12) {
-			System.err.println("More than 12 month working per year");
+			System.err.println("Error: More than 12 months working per year");
+			return tax;
 		}
+	
 		
 		if (numberOfChildren > 3) {
 			numberOfChildren = 3;
@@ -33,11 +34,9 @@ public class TaxFunction {
 			tax = (int) Math.round(0.05 * (((monthlySalary + otherMonthlyIncome) * numberOfMonthWorking) - deductible - 54000000));
 		}
 		
-		if (tax < 0) {
-			return 0;
-		}else {
-			return tax;
-		}
+		tax = Math.max((int) Math.round(0.05 * tax), 0);
+
+		return tax;
 			 
 	}
 	
