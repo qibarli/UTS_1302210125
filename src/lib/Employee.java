@@ -1,7 +1,6 @@
 package lib;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +17,8 @@ public class Employee {
 	private int dayJoined;
 	private int monthWorkingInYear;
 	
+	private LocalDate joiningDate;
+
 	private boolean isForeigner;
 	private boolean gender; //true = Laki-laki, false = Perempuan
 	
@@ -47,33 +48,25 @@ public class Employee {
 		childIdNumbers = new LinkedList<String>();
 	}
 	
-	/**
-	 * Fungsi untuk menentukan gaji bulanan pegawai berdasarkan grade kepegawaiannya (grade 1: 3.000.000 per bulan, grade 2: 5.000.000 per bulan, grade 3: 7.000.000 per bulan)
-	 * Jika pegawai adalah warga negara asing gaji bulanan diperbesar sebanyak 50%
-	 */
-	
-	public void setMonthlySalary(int grade) {	
+	 public void setMonthlySalary(int grade) {	
 		if (grade == 1) {
 			monthlySalary = 3000000;
-			if (isForeigner) {
-				monthlySalary = (int) (3000000 * 1.5);
-			}
-		}else if (grade == 2) {
+		} else if (grade == 2) {
 			monthlySalary = 5000000;
-			if (isForeigner) {
-				monthlySalary = (int) (3000000 * 1.5);
-			}
-		}else if (grade == 3) {
+		} else if (grade == 3) {
 			monthlySalary = 7000000;
-			if (isForeigner) {
-				monthlySalary = (int) (3000000 * 1.5);
-			}
+		}
+	
+		// Handling special case for foreign employees
+		if (isForeigner) {
+			monthlySalary *= 1.5;
 		}
 	}
 	
-	public void setAnnualDeductible(int deductible) {	
-		this.annualDeductible = deductible;
+	public void setAnnualDeductible(int annualDeductible) {	
+    	this.annualDeductible = annualDeductible;
 	}
+
 	
 	public void setAdditionalIncome(int income) {	
 		this.otherMonthlyIncome = income;
@@ -90,16 +83,23 @@ public class Employee {
 	}
 	
 	public int getAnnualIncomeTax() {
+        int monthsWorked = calculateMonthsWorked();
+        return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthsWorked, annualDeductible, spouseIdNumber.isEmpty(), childIdNumbers.size());
+    }
 		
-		//Menghitung berapa lama pegawai bekerja dalam setahun ini, jika pegawai sudah bekerja dari tahun sebelumnya maka otomatis dianggap 12 bulan.
-		LocalDate date = LocalDate.now();
-		
-		if (date.getYear() == yearJoined) {
-			monthWorkingInYear = date.getMonthValue() - monthJoined;
-		}else {
-			monthWorkingInYear = 12;
+		private int calculateMonthsWorked() {
+			LocalDate currentDate = LocalDate.now();
+			if (joiningDate.getYear() == currentDate.getYear()) {
+				return currentDate.getMonthVale() - joiningDate.getMonthValue();
+			} else {
+				return 12;
+			}
 		}
-		
+
+		private enum Gender {
+			MALE, FEMALE
+		}
+
 		return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthWorkingInYear, annualDeductible, spouseIdNumber.equals(""), childIdNumbers.size());
 	}
 }
