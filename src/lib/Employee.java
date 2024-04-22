@@ -90,7 +90,7 @@ public class Employee {
 		private int calculateMonthsWorked() {
 			LocalDate currentDate = LocalDate.now();
 			if (joiningDate.getYear() == currentDate.getYear()) {
-				return currentDate.getMonthVale() - joiningDate.getMonthValue();
+				return currentDate.getMonthValue() - joiningDate.getMonthValue();
 			} else {
 				return 12;
 			}
