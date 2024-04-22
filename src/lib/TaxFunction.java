@@ -20,7 +20,7 @@ public class TaxFunction {
 	
 		if (numberOfMonthWorking > 12) {
 			System.err.println("Error: More than 12 months working per year");
-			return tax; // Return 0 tax when there's an error
+			return tax;
 		}
 	
 		
@@ -34,11 +34,9 @@ public class TaxFunction {
 			tax = (int) Math.round(0.05 * (((monthlySalary + otherMonthlyIncome) * numberOfMonthWorking) - deductible - 54000000));
 		}
 		
-		if (tax < 0) {
-			return 0;
-		}else {
-			return tax;
-		}
+		tax = Math.max((int) Math.round(0.05 * tax), 0);
+
+		return tax;
 			 
 	}
 	
